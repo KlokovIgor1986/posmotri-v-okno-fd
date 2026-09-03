@@ -1,3 +1,73 @@
+/* #region глобальные переменные */
+
+:root {
+  /* страница */
+  --width-page: 1200px;
+
+  /* цвет */
+  --color-text: #fff;
+  --color-accent: #545050;
+  --color-bg: #1b1919; /* фон страницы */
+  --color-primary: #fff; /* границы, обводка */
+
+  /* шрифты */
+  --font-size-def: 18px;
+  --font-size-big: 30px;
+  --font-size-huge: 75px;
+  --font-weight-def: 400;
+  --font-weight-bold: 700;
+  --font-line-height-fix: 16.2px;
+  --font-line-height-smal: 0.94; /* 94% */
+  --font-line-height-def: 1; /* 100% */
+  --font-line-height-big: 1.1; /* 110% */
+  --font-family-def: "Fira Sans Condensed", sans-serif;
+  --font-family-add: "Oswald", sans-serif;
+  --font-letter-spacing-def: normal; /* 0% */
+
+  /* стандартные элементы */
+
+  /* миниатюра видео в списке */
+  --width-thumbnail: 194px;
+  --height-thumbnail: 103px;
+
+  /* карточка с миниатюрой */
+  --width-video-card: 390px;
+
+  /* кнопки */
+  --width-button: 194px;
+  --height-button: 34px;
+
+  /* видеоконтейнер */
+  --width-video-container: 711px;
+  --height-video-container: 386px;
+
+  /* контейнер списка карточек */
+  --height-content-list-container: 298px;
+
+  /* текстовое поле формы */
+  --color-text-placeholder: rgb(255 255 255 / 0.7);
+  --width-textfield: 225px;
+  --height-textfield: 27px;
+
+  /* обводка */
+  --outline-def: 1px solid var(--color-primary);
+  --outline-offset: 1px;
+
+  /* кастомные элементы */
+
+  /* чекбокс */
+  --size-checkbox: 19px;
+
+  /* скролбар */
+  --color-scrollbar-track: rgb(217 217 217 / 10%);
+  --color-scrollbar-thumb: #d9d9d9;
+  --width-scrollbar: 4px;
+}
+
+/* #endregion глобальные переменные */
+
+/* #region сброс и настройка общих стилей */
+
 *,
 *::before,
 *::after {
@@ -9,13 +79,20 @@ html {
 }
 
 .page {
-  inline-size: 1200px;
-  block-size: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: auto;
-  color: #fff;
-  font-family: 'Fira Sans Condensed', sans-serif;
-  font-size: 18px;
-  background-color: #1b1919;
+  color: var(--color-text);
+  font-family: var(--font-family-def);
+  font-weight: var(--font-weight-def);
+  font-size: var(--font-size-def);
+  line-height: var(--font-line-height-def);
+  letter-spacing: var(--font-letter-spacing-def);
+  background-color: var(--color-bg);
+  inline-size: var(--width-page);
+  block-size: 100%;
+  /*block-size: 800px; /* для проверки по макету */
 }
 
 h1,
@@ -37,15 +114,381 @@ ol {
   list-style: none;
 }
 
-/* Кастомный скроллбар */
+/* #endregion сброс и настройка общих стилей */
+
+/* #region контент */
+
+.content {
+  display: flex; /* поставить в ряд блоки видео и списока */
+  gap: 30px; /* между блоком видео с формой и блоком списка */
+  width: 100%;
+  margin-inline: 30px;
+  margin-block: 133px;
+}
+
+/* #region секция "результат" */
+
+.result {
+  align-self: flex-end;
+}
+
+/* #region видеоконтейнер */
+
+.result__video-container {
+  position: relative; /* для прелоадоров */
+  margin-block: 78px 16px;
+  inline-size: var(--width-video-container); /* задано по брифу */
+  block-size: var(--height-video-container); /* задано по брифу */
+}
+
+/* видео растянули */
+.result__video {
+  object-fit: cover;
+  cursor: pointer;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* #endregion видеоконтейнер */
+
+/* #region форма поиска */
+
+.search-form {
+  display: flex;
+  justify-content: space-between;
+  align-self: flex-start;
+}
+
+/* группа поллей формы поиска */
+.search-form__fieldset {
+  border: none;
+}
+
+/* заголовок группы полей формы поиска */
+.search-form__fieldset-title {
+  margin-bottom: 7px;
+  font: inherit; /* задан в .page */
+}
+
+/* лэйбл формы поиска */
+.search-form__label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  inline-size: fit-content;
+}
+
+/* 
+* В соответствии с настройками и внутренней логикой работы браузера,
+* при получении элементом input type='text' фокуса по клику мыши
+* сработает не только правило CSS с псевдоклассом :focus, но может
+* сработать и правило с псевдоклассом :focus-visible даже при отключении
+* окружения с appearance, -webkit-appearance, -moz-appearance.
+* Об этой особенности работы псевдоклассов указанно в документации
+* https://www.w3.org/TR/selectors-4/#the-focus-visible-pseudo
+* Выполнить требование брифа с обводкой элемента для input type='text'
+* только при получении фокуса по нажатию клавиши TAB технически невозможно,
+* так как такое решение будет работать не всегда.
+*/
+
+/* убираем обводку лейбла при фокусе по клику */
+.search-form__label:has(:focus) {
+  outline: none;
+}
+
+/* обводка лейбла при фокусе по табу */
+.search-form__label:has(:focus-visible) {
+  outline: var(--outline-def);
+  outline-offset: var(--outline-offset);
+}
+
+/* текст лэбла формы поиска */
+.search-form__label-text {
+  font: inherit; /* задан в .page */
+}
+
+/* скрываем стандартные элементы, чтобы нарисовать свои */
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  inline-size: 1px;
+  block-size: 1px;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* текстовое поле формы поиска */
+.search-form__textfield {
+  border-top: 1px solid var(--color-primary);
+  border-right: none;
+  border-bottom: 1px solid var(--color-primary);
+  border-left: none;
+  color: var(--color-text);
+  font: inherit; /* задан в .page */
+  background-color: transparent;
+  inline-size: var(--width-textfield);
+  block-size: var(--height-textfield);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* убираем обводку input */
+.search-form__textfield:focus,
+.search-form__textfield:focus-visible {
+  outline: none;
+}
+
+/* подсказка в текстовом поле формы поиска */
+.search-form__textfield::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+/* чекбоксы формы поиска */
+.search-form__checkbox-list {
+  display: flex; /* выстроить в ряд */
+  gap: 15px;
+}
+
+/*.search-form__checkbox {} /* стандартный чекбокс скрыт */
+
+/* кастомный чекбокс из span */
+.search-form__pseudo-checkbox {
+  border: 1px solid var(--color-primary);
+  padding: 1px;
+  inline-size: var(--size-checkbox);
+  block-size: var(--size-checkbox);
+}
+
+/* кастомный маркер из псевдоэлемента ::after от span */
+.search-form__pseudo-checkbox::after {
+  content: "";
+  display: block;
+  opacity: 0; /* скрыт до состояния checked */
+  background-color: var(--color-primary);
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* показать псевдоэлемент(::after) кастомного чекбокса (маркер чекбокса)
+ * стоящий за(+) чекбоксом(input) в состоянии checked */
+.search-form__checkbox:checked + .search-form__pseudo-checkbox::after {
+  opacity: 1;
+}
+
+/* подчеркнуть текст в лэйбле при наведении на текст внутри */
+.search-form__label:has(.search-form__label-text:hover) {
+  text-decoration: underline;
+}
+
+/* настройки всех кнопок */
+.button {
+  border: 1px solid var(--color-primary);
+  color: var(--color-text);
+  font: inherit; /* задан в .page */
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+/* текст подчеркивается при наведении */
+.button:hover {
+  text-decoration: underline;
+}
+
+/* при нажатии меняет цвет */
+.button:active {
+  background-color: var(--color-accent);
+}
+
+/* сбрасываем обводку при фокусе от мыши или тачпада */
+.button:focus {
+  outline: none;
+}
+
+/* задаём обводку при фокусе от клавиши TAB */
+.button:focus-visible {
+  outline: var(--outline-def);
+  outline-offset: var(--outline-offset);
+}
+
+/* кнопка "найти" */
+.search-form__submit-button {
+  align-self: flex-end;
+  inline-size: var(--width-button);
+  block-size: var(--height-button);
+}
+
+/* #endregion форма поиска */
+/* #endregion результат */
+
+/* #region секция "детали контента" */
+
+.content__details {
+  display: flex;
+  flex-direction: column;
+  gap: 26px; /* 26px */
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* заголовок списка контента */
+.title {
+  font-family: var(--font-family-add);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-huge);
+  line-height: var(--font-line-height-smal);
+  text-transform: uppercase;
+}
+
+/* цвет акцента */
+.content__accent {
+  color: var(--color-accent);
+}
+
+/* контейнер списка карточек и кнопки "смотреть ещё" */
+.content__list-container {
+  position: relative; /* для прелоадеров */
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding-inline: 2px;
+  padding-block: 2px;
+  overflow: auto;
+  /* указано в брифе для скролла */
+  block-size: var(--height-content-list-container);
+}
+
+/* список карточек с миниатюрами городов */
+.content__list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-inline-size: var(--width-video-card); /* для обрезки заголовка */
+  /* ширина задана здесь, а не в .content__video-card,
+   * чтобы у ссылки не увеличивалась ширина на 1px справа */
+}
+
+/* #region теймплейты */
+
+/*.preloader-template {}
+.cards-list-item-template {}*/
+
+/* пукт списка контента (карточек) */
+/*.content__list-item {}*/
+
+/* ссылка карточки */
+.content__card-link {
+  display: block; /* для задания фона */
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+/* при нажатии меняет цвет */
+.content__card-link:active {
+  background-color: var(--color-accent);
+}
+
+/* подчёркиваем текст при наведении */
+.content__card-link:hover {
+  text-decoration: underline;
+}
+
+/* убираем обводку при фокусе мышью */
+.content__card-link:focus {
+  outline: none;
+}
+
+/* добавляем обводку при фокусе TAB-ом */
+.content__card-link:focus-visible {
+  outline: var(--outline-def);
+  outline-offset: var(--outline-offset);
+}
+
+/* выбранная карточка меняет цвет */
+.content__card-link_current {
+  background-color: var(--color-accent);
+}
+
+/* карточка с миниатюрой города */
+.content__video-card {
+  display: flex;
+  align-items: flex-start;
+  inline-size: 100%; /* выстроить в ряд */
+}
+
+/*
+* max-inline-size (у ссылки выше) необходимо для flex-grow: 1;
+* для ограничения роста content__video-card-description-container
+* при переполнении. min-inline-size: 0; разрешает обрезку заголовка
+* при переполнении.
+*/
+
+/* блок карточки с заголовком и описанием */
+.content__video-card-description-container {
+  flex-grow: 1;
+  min-inline-size: 0; /* для обрезки заголовка */
+}
+
+/* заголовок карточки */
+.content__video-card-title {
+  margin-bottom: 6px;
+  overflow: hidden; /* обрезка заголовка */
+  font-family: var(--font-family-add);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-big);
+  line-height: var(--font-line-height-def);
+  text-transform: uppercase;
+  text-overflow: ellipsis; /* ... */
+  white-space: nowrap;
+}
+
+/* описание карточки */
+.content__video-card-description {
+  display: -webkit-box; /*старый флекс для line-clamp */
+  overflow: hidden;
+  font: inherit;
+  line-height: var(--font-line-height-fix);
+  -webkit-box-orient: vertical; /* без префикса не поддерживается */
+  -webkit-line-clamp: 4;
+}
+
+/* миниатюра карточки */
+.content__video-card-thumbnail {
+  object-fit: cover;
+  object-position: right;
+  min-inline-size: var(--width-thumbnail); /* указано в брифе */
+  block-size: var(--height-thumbnail); /* указано в брифе */
+}
+
+/*.more-button-template {}*/
+
+/* кнопка "показать ещё" */
+.more-button {
+  inline-size: 100%;
+  min-block-size: var(--height-button);
+}
+
+/* бокс с текстом ошибки */
+/*.error-template {}*/
+
+/* #endregion теймплейты */
+/* #endregion секция "детали контента" */
+
+/* #region кастомный скроллбар */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+  inline-size: var(--width-scrollbar);
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgb(217 217 217 / 10%);
+  background-color: var(--color-scrollbar-track);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #D9D9D9;
+  background-color: var(--color-scrollbar-thumb);
 }
+/* #endregion кастомный скроллбар */
+/* #endregion контент */
