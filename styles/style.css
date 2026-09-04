@@ -1,12 +1,9 @@
 /* #region глобальные переменные */
 
 :root {
-  /* страница */
-  --width-page: 1200px;
-
   /* цвет */
   --color-text: #fff;
-  --color-accent: #545050;
+  --color-accent: #545050; /* фон выбранных элементов */
   --color-bg: #1b1919; /* фон страницы */
   --color-primary: #fff; /* границы, обводка */
 
@@ -16,52 +13,12 @@
   --font-size-huge: 75px;
   --font-weight-def: 400;
   --font-weight-bold: 700;
-  --font-line-height-fix: 16.2px;
-  --font-line-height-smal: 0.94; /* 94% */
-  --font-line-height-def: 1; /* 100% */
-  --font-line-height-big: 1.1; /* 110% */
   --font-family-def: "Fira Sans Condensed", sans-serif;
   --font-family-add: "Oswald", sans-serif;
-  --font-letter-spacing-def: normal; /* 0% */
-
-  /* стандартные элементы */
-
-  /* миниатюра видео в списке */
-  --width-thumbnail: 194px;
-  --height-thumbnail: 103px;
-
-  /* карточка с миниатюрой */
-  --width-video-card: 390px;
-
-  /* кнопки */
-  --width-button: 194px;
-  --height-button: 34px;
-
-  /* видеоконтейнер */
-  --width-video-container: 711px;
-  --height-video-container: 386px;
-
-  /* контейнер списка карточек */
-  --height-content-list-container: 298px;
-
-  /* текстовое поле формы */
-  --color-text-placeholder: rgb(255 255 255 / 0.7);
-  --width-textfield: 225px;
-  --height-textfield: 27px;
 
   /* обводка */
   --outline-def: 1px solid var(--color-primary);
   --outline-offset: 1px;
-
-  /* кастомные элементы */
-
-  /* чекбокс */
-  --size-checkbox: 19px;
-
-  /* скролбар */
-  --color-scrollbar-track: rgb(217 217 217 / 10%);
-  --color-scrollbar-thumb: #d9d9d9;
-  --width-scrollbar: 4px;
 }
 
 /* #endregion глобальные переменные */
@@ -87,10 +44,10 @@ html {
   font-family: var(--font-family-def);
   font-weight: var(--font-weight-def);
   font-size: var(--font-size-def);
-  line-height: var(--font-line-height-def);
-  letter-spacing: var(--font-letter-spacing-def);
+  line-height: 1;
+  letter-spacing: normal; /* 0% */
   background-color: var(--color-bg);
-  inline-size: var(--width-page);
+  inline-size: 1200px;
   block-size: 100%;
   /*block-size: 800px; /* для проверки по макету */
 }
@@ -121,29 +78,33 @@ ol {
 .content {
   display: flex; /* поставить в ряд блоки видео и списока */
   gap: 30px; /* между блоком видео с формой и блоком списка */
-  width: 100%;
+  inline-size: 100%;
   margin-inline: 30px;
-  margin-block: 133px;
+  margin-block: auto; /* 133px */
 }
 
 /* #region секция "результат" */
 
 .result {
-  align-self: flex-end;
+  display: flex;
+  align-self: flex-end; /* отключить для подгонки под макет */
+  flex-direction: column;
+  gap: 16px; /* между видео и формой */
 }
 
 /* #region видеоконтейнер */
 
 .result__video-container {
   position: relative; /* для прелоадоров */
-  margin-block: 78px 16px;
-  inline-size: var(--width-video-container); /* задано по брифу */
-  block-size: var(--height-video-container); /* задано по брифу */
+  margin-block-start: 78px;
+  inline-size: 711px; /* задано по брифу */
+  block-size: 386px; /* задано по брифу */
 }
 
 /* видео растянули */
 .result__video {
   object-fit: cover;
+  object-position: center;
   cursor: pointer;
   inline-size: 100%;
   block-size: 100%;
@@ -157,6 +118,7 @@ ol {
   display: flex;
   justify-content: space-between;
   align-self: flex-start;
+  inline-size: 100%;
 }
 
 /* группа поллей формы поиска */
@@ -166,8 +128,8 @@ ol {
 
 /* заголовок группы полей формы поиска */
 .search-form__fieldset-title {
-  margin-bottom: 7px;
   font: inherit; /* задан в .page */
+  margin-block-start: 2px;
 }
 
 /* лэйбл формы поиска */
@@ -221,18 +183,20 @@ ol {
 
 /* текстовое поле формы поиска */
 .search-form__textfield {
-  border-top: 1px solid var(--color-primary);
-  border-right: none;
-  border-bottom: 1px solid var(--color-primary);
-  border-left: none;
+  border-block-start: 1px solid var(--color-primary);
+  border-inline-end: none;
+  border-block-end: 1px solid var(--color-primary);
+  border-inline-start: none;
   color: var(--color-text);
   font: inherit; /* задан в .page */
   background-color: transparent;
-  inline-size: var(--width-textfield);
-  block-size: var(--height-textfield);
+  inline-size: 225px;
+  min-block-size: 1.5em; /* для подгонки по макету */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  margin-block-start: 7px;
+  padding-inline-start: 0;
 }
 
 /* убираем обводку input */
@@ -243,13 +207,14 @@ ol {
 
 /* подсказка в текстовом поле формы поиска */
 .search-form__textfield::placeholder {
-  color: var(--color-text-placeholder);
+  color: rgb(255 255 255 / 0.7);
 }
 
 /* чекбоксы формы поиска */
 .search-form__checkbox-list {
   display: flex; /* выстроить в ряд */
   gap: 15px;
+  margin-block-start: 8px;
 }
 
 /*.search-form__checkbox {} /* стандартный чекбокс скрыт */
@@ -258,8 +223,8 @@ ol {
 .search-form__pseudo-checkbox {
   border: 1px solid var(--color-primary);
   padding: 1px;
-  inline-size: var(--size-checkbox);
-  block-size: var(--size-checkbox);
+  inline-size: 19px;
+  block-size: 19px;
 }
 
 /* кастомный маркер из псевдоэлемента ::after от span */
@@ -279,7 +244,7 @@ ol {
 }
 
 /* подчеркнуть текст в лэйбле при наведении на текст внутри */
-.search-form__label:has(.search-form__label-text:hover) {
+.search-form__label:hover .search-form__label-text {
   text-decoration: underline;
 }
 
@@ -318,8 +283,8 @@ ol {
 /* кнопка "найти" */
 .search-form__submit-button {
   align-self: flex-end;
-  inline-size: var(--width-button);
-  block-size: var(--height-button);
+  inline-size: 194px;
+  block-size: 34px;
 }
 
 /* #endregion форма поиска */
@@ -330,7 +295,7 @@ ol {
 .content__details {
   display: flex;
   flex-direction: column;
-  gap: 26px; /* 26px */
+  gap: 26px;
   inline-size: 100%;
   block-size: 100%;
 }
@@ -340,8 +305,10 @@ ol {
   font-family: var(--font-family-add);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-huge);
-  line-height: var(--font-line-height-smal);
+  line-height: 0.94;
   text-transform: uppercase;
+  padding-block-start: 0.027em; /* для подгонки заголовка по макету */
+  block-size: 2.8em; /* для подгонки заголовка по макету */
 }
 
 /* цвет акцента */
@@ -355,11 +322,12 @@ ol {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  padding-inline: 2px;
-  padding-block: 2px;
+  padding-inline-start: 2px;
+  padding-inline-end: 3px;
+  padding-block: 2px; /* чтобы обводка не прилипала к границе */
   overflow: auto;
   /* указано в брифе для скролла */
-  block-size: var(--height-content-list-container);
+  block-size: 298px;
 }
 
 /* список карточек с миниатюрами городов */
@@ -367,7 +335,7 @@ ol {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  max-inline-size: var(--width-video-card); /* для обрезки заголовка */
+  max-inline-size: 390px; /* для обрезки заголовка */
   /* ширина задана здесь, а не в .content__video-card,
    * чтобы у ссылки не увеличивалась ширина на 1px справа */
 }
@@ -435,12 +403,13 @@ ol {
 
 /* заголовок карточки */
 .content__video-card-title {
-  margin-bottom: 6px;
+  margin-block-start: 2px;
+  margin-block-end: 4px;
   overflow: hidden; /* обрезка заголовка */
   font-family: var(--font-family-add);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-big);
-  line-height: var(--font-line-height-def);
+  line-height: 1;
   text-transform: uppercase;
   text-overflow: ellipsis; /* ... */
   white-space: nowrap;
@@ -451,7 +420,7 @@ ol {
   display: -webkit-box; /*старый флекс для line-clamp */
   overflow: hidden;
   font: inherit;
-  line-height: var(--font-line-height-fix);
+  line-height: 0.9;
   -webkit-box-orient: vertical; /* без префикса не поддерживается */
   -webkit-line-clamp: 4;
 }
@@ -460,8 +429,8 @@ ol {
 .content__video-card-thumbnail {
   object-fit: cover;
   object-position: right;
-  min-inline-size: var(--width-thumbnail); /* указано в брифе */
-  block-size: var(--height-thumbnail); /* указано в брифе */
+  min-inline-size: 194px; /* указано в брифе */
+  block-size: 103px; /* указано в брифе */
 }
 
 /*.more-button-template {}*/
@@ -469,7 +438,7 @@ ol {
 /* кнопка "показать ещё" */
 .more-button {
   inline-size: 100%;
-  min-block-size: var(--height-button);
+  min-block-size: 34px;
 }
 
 /* бокс с текстом ошибки */
@@ -480,15 +449,15 @@ ol {
 
 /* #region кастомный скроллбар */
 .custom-scrollbar::-webkit-scrollbar {
-  inline-size: var(--width-scrollbar);
+  inline-size: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background-color: var(--color-scrollbar-track);
+  background-color: rgb(217 217 217 / 10%);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: var(--color-scrollbar-thumb);
+  background-color: #d9d9d9;
 }
 /* #endregion кастомный скроллбар */
 /* #endregion контент */
