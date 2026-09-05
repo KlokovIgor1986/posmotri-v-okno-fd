@@ -308,7 +308,7 @@ ol {
   line-height: 0.94;
   text-transform: uppercase;
   padding-block-start: 0.027em; /* для подгонки заголовка по макету */
-  block-size: 2.8em; /* для подгонки заголовка по макету */
+  /*block-size: 2.8em; /* для подгонки заголовка по макету */
 }
 
 /* цвет акцента */
